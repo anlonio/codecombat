@@ -179,6 +179,7 @@ module.exports = class Spell
     skipProtectAPI = @skipProtectAPI or not writable or @level.isType('game-dev')
     problemContext = @createProblemContext thang
     includeFlow = @level.isType('hero', 'hero-ladder', 'hero-coop', 'course', 'course-ladder', 'game-dev') and not skipProtectAPI
+    # debugger
     aetherOptions = createAetherOptions
       functionName: @name
       codeLanguage: @language
@@ -187,6 +188,7 @@ module.exports = class Spell
       includeFlow: includeFlow
       problemContext: problemContext
       useInterpreter: true
+      i18n: i18n
     aether = new Aether aetherOptions
     if @worker
       workerMessage =

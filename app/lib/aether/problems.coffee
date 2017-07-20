@@ -38,6 +38,7 @@ scoreFuzziness = 0.8
 acceptMatchThreshold = 0.5
 
 module.exports.createUserCodeProblem = (options) ->
+  # debugger
   options ?= {}
   options.aether ?= @  # Can either be called standalone or as an Aether method
   if options.type is 'transpile' and options.error
@@ -298,7 +299,7 @@ getRuntimeHint = (options) ->
   hintCreator = new HintCreator context, languageID
   hintCreator.getHint code, options
 
-class HintCreator
+module.exports.HintCreator = class HintCreator
   # Create hints for an error message based on a problem context
   # TODO: better class name, move this to a separate file
 
@@ -334,6 +335,8 @@ class HintCreator
     @context = context ? {}
 
   getHint: (code, {message, range, error, aether}) ->
+    # console.trace()
+    debugger
     console.log error
     return unless @context?
     if error.code is 'UndefinedVariable' and error.when is 'write' and aether.language.id is 'javascript'

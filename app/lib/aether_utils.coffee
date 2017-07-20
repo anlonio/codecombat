@@ -33,6 +33,7 @@ module.exports.createAetherOptions = (options) ->
     executionLimit: 3 * 1000 * 1000
     language: options.codeLanguage
     useInterpreter: true
+    humanLanguage: _.pick(require('locale/en'), 'nativeDescription', 'englishDescription', 'translation.esper')
   parameters = functionParameters[options.functionName]
   unless parameters
     console.warn "Unknown method #{options.functionName}: please add function parameters to lib/aether_utils.coffee."
