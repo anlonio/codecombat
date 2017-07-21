@@ -47,7 +47,7 @@ module.exports = class Python extends Language
         return unless node.type is "WhileStatement"
         return unless node.body.body.length is 0
         # Craft an warning for empty loop
-        debugger
+        # debugger
         problems.push
           type: 'transpile'
           reporter: 'aether'
@@ -69,7 +69,7 @@ module.exports = class Python extends Language
           return unless node.type is "IfStatement"
           return unless node.consequent.body.length is 0
           # Craft an warning for empty loop
-          debugger
+          # debugger
           problems.push
             type: 'transpile'
             reporter: 'aether'

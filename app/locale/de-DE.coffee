@@ -2313,3 +2313,4 @@ module.exports = nativeDescription: "Deutsch (Deutschland)", englishDescription:
     fx_missing_paren: "Wenn du `$1` als Funktion verwenden möchtest, dann brauchst du `()`."
     unmatched_token: "`$1` ohne Gegenpart.  Jede öffnende `$2` benötigt eine zugehörige schließende `$3`."
     unterminated_string: "String ohne Abschluss. Füge ein ein `\"` am Ende deiner Zeichenkette hinzu."
+    missing_semicolon: "Missing semicolon [deutsch]." #nocommit

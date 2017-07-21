@@ -336,7 +336,7 @@ module.exports.HintCreator = class HintCreator
 
   getHint: (code, {message, range, error, aether}) ->
     # console.trace()
-    debugger
+    # debugger
     console.log error
     return unless @context?
     if error.code is 'UndefinedVariable' and error.when is 'write' and aether.language.id is 'javascript'

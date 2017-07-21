@@ -105,6 +105,7 @@ module.exports = class Problem
       @lineMarkerRange.start.detach()
       @lineMarkerRange.end.detach()
 
+  # TODO: Figure out how to ensure right amount of `s
   translate: (msg) ->
     return msg unless msg
     tx = (regex, key) ->
@@ -118,10 +119,15 @@ module.exports = class Problem
     tx /Line (\d+): /, 'line_no'
     tx /TypeError: /, 'type_error'
     tx /ReferenceError: /, 'reference_error'
-    tx /`([a-zA-Z.]+)` is not a function/, 'x_not_a_function'
-    tx /Look out for capitalization: `([a-zA-Z.]+)` should be `([a-zA-Z.]+)`./, 'capitalization_issues'
-    tx /Look out for spelling issues: did you mean `([a-zA-Z.]+)` instead of `([a-zA-Z.]+)`\?/, 'capitalization_issues'
+    console.log msg
+    # debugger
+    tx /`?([a-zA-Z.:]+)`? is not a function/, 'x_not_a_function'
+    console.log msg
+    # debugger
+    tx /Look out for capitalization: `([a-zA-Z.:]+)` should be `([a-zA-Z.:]+)`./, 'capitalization_issues'
+    tx /Look out for spelling issues: did you mean `([a-zA-Z.:]+)` instead of `([a-zA-Z.:]+)`\?/, 'capitalization_issues'
     tx /Empty ([a-zA-Z]+ statement). Put 4 spaces in front of statements inside the ([a-zA-Z]+ statement)\./, 'py_empty_block'
     tx /Unmatched `(.)`.  Every opening `(.)` needs a closing `(.)` to match it./, 'unmatched_token'
     tx /Unterminated string. Add a matching `"` at the end of your string./, 'unterminated_string'
+    tx /Missing semicolon./, 'missing_semicolon'
     msg

@@ -15,7 +15,7 @@ protectBuiltins = require './protectBuiltins'
 optionsValidator = require './validators/options'
 languages = require './languages/languages'
 interpreter = require './interpreter'
-i18n = require 'i18n'
+# i18n = require 'i18n'
 
 module.exports = class Aether
   @execution: execution
