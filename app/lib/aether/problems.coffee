@@ -425,7 +425,7 @@ module.exports.HintCreator = class HintCreator
     if not hint? and target.toLowerCase() is @thisValue.toLowerCase()
       hint = "Uppercase or lowercase problem. Try `#{@thisValue}`"
     hint ?= @getNoCaseMatch target, @context.stringReferences, (match) ->
-      "Missing quotes.  Try `\"#{match}\"`"
+      "Missing quotes. Try `\"#{match}\"`"
     hint ?= @getNoCaseMatch target, @context.thisMethods, (match) =>
       "Try `#{@thisValueAccess}#{match}()`"
     hint ?= @getNoCaseMatch target, @context.thisProperties, (match) =>

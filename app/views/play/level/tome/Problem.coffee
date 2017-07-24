@@ -113,21 +113,16 @@ module.exports = class Problem
       key = $.i18n.t(ki)
       return if key is ki
       msg = msg.replace regex, key
+      msg.replace(/``/g, '`')
 
     msg = msg.replace /([A-Za-z]+Error:) \1/, '$1'
     return msg if me.get('preferredLanguage', true) in ['en', 'en-US']
-    tx /Line (\d+): /, 'line_no'
-    tx /TypeError: /, 'type_error'
-    tx /ReferenceError: /, 'reference_error'
-    console.log msg
-    # debugger
-    tx /`?([a-zA-Z.:]+)`? is not a function/, 'x_not_a_function'
-    console.log msg
-    # debugger
-    tx /Look out for capitalization: `([a-zA-Z.:]+)` should be `([a-zA-Z.:]+)`./, 'capitalization_issues'
-    tx /Look out for spelling issues: did you mean `([a-zA-Z.:]+)` instead of `([a-zA-Z.:]+)`\?/, 'capitalization_issues'
-    tx /Empty ([a-zA-Z]+ statement). Put 4 spaces in front of statements inside the ([a-zA-Z]+ statement)\./, 'py_empty_block'
-    tx /Unmatched `(.)`.  Every opening `(.)` needs a closing `(.)` to match it./, 'unmatched_token'
-    tx /Unterminated string. Add a matching `"` at the end of your string./, 'unterminated_string'
-    tx /Missing semicolon./, 'missing_semicolon'
+    
+    en = require('locale/en').translation
+    translationKeys = Object.keys(en.esper)
+    for translationKey in translationKeys
+      englishString = en.esper[translationKey]
+      regex = new RegExp(englishString.replace(/\$\d|`\$\d`/g, '([\\d\\w.:\'"`]+)').replace(/\s+/g, '\\s+'))
+      tx regex, translationKey
+      null
     msg
