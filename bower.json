@@ -51,7 +51,8 @@
     "promise-polyfill": "^5.2.1",
     "font-awesome": "fontawesome#^4.7.0",
     "fetch": "^2.0.2",
-    "file-saver": "^1.3.3"
+    "file-saver": "^1.3.3",
+    "fast-levenshtein": "^2.0.6"
   },
   "overrides": {
     "algolia-autocomplete.js": {
