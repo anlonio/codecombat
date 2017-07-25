@@ -1,15 +1,32 @@
 .container
-  input(v-model:value="levelSlug")
-  button(@click="getProblems")
-    | Get Problems
-  input(type="number" step="0.01" v-model:value="partialThreshold")
-  input(type="number" step="0.01" v-model:value="completeThreshold")
-  table
+  form(action="")
+    input(v-model:value="levelSlug")
+    button(@click.prevent="getProblems")
+      | Get Problems
+  select(v-model="language")
+    option(value="en") en
+    option(value="de-DE") de-DE
+  br
+  label
+    | Partial threshold %
+    input(type="number" step="1" v-model:value="partialThreshold")
+  label
+    | Complete threshold %
+    input(type="number" step="1" v-model:value="completeThreshold")
+  label
+    | Count threshold
+    input(type="number" step="1" v-model:value="countThreshold")
+  select(v-model="displayMode")
+    option human-readable
+    option export
+  table.human-readable(v-if="displayMode === 'human-readable'")
     tr
       th
         | Original
       th
         | Translated
+      th
+        | Trimmed
       th
         | Difference
       th
@@ -18,5 +35,22 @@
     tr(v-for="problem in problems", :style="{ backgroundColor: color(problem) }")
       td {{ problem.message }}
       td {{ problem.translated }}
+      td {{ problem.trimmed.length }}
       td {{ percentDifference(problem) }}%
       td {{ problem.count }}
+  
+  .export(v-else)
+    tr
+      td.counts
+        pre
+          div(v-for="problem, index in exportList",
+             :style="{ backgroundColor: color(problem) }")
+            span {{problem.count}}
+            br
+      td
+        pre
+          div(v-for="problem, index in exportList",
+             :style="{ backgroundColor: color(problem) }")
+            span err_{{String(index).padStart(3,'0')}}: "{{ problem.trimmed }}"
+            br
+          

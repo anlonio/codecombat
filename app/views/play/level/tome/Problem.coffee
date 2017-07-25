@@ -115,14 +115,18 @@ module.exports = class Problem
       msg = msg.replace regex, key
       msg.replace(/``/g, '`')
 
+    escapeRegExp = (str) ->
+      # https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+
     msg = msg.replace /([A-Za-z]+Error:) \1/, '$1'
-    return msg if me.get('preferredLanguage', true) in ['en', 'en-US']
+    return msg if i18n.lng() in ['en', 'en-US']
     
     en = require('locale/en').translation
     translationKeys = Object.keys(en.esper)
     for translationKey in translationKeys
       englishString = en.esper[translationKey]
-      regex = new RegExp(englishString.replace(/\$\d|`\$\d`/g, '([\\d\\w.:\'"`]+)').replace(/\s+/g, '\\s+'))
+      regex = new RegExp(escapeRegExp(englishString).replace(/\\\$\d|`\\\$\d`/g, '(`[\\d\\w.:\'" ]+`|[\\d\\w.:\'" ]+)').replace(/\s+/g, '\\s+'))
       tx regex, translationKey
       null
     msg
