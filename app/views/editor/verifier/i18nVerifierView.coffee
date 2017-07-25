@@ -10,24 +10,38 @@ I18nVerifierComponent = Vue.extend
     endDay: '2017-07-30'
     partialThreshold: 1
     completeThreshold: 70
-    countThreshold: 20
+    countThreshold: 0
+    totalCount: 0
     me: me
     serverConfig: serverConfig
     problems: []
     regexes: []
     otherRegexes: []
     displayMode: 'export'
+    showCampaigns: false
+    showLevels: false
+    campaigns: []
+    selectedCampaign: null
   computed:
     exportList: ->
       _(@problems).filter((p) =>
-        @percentDifference(p) < @completeThreshold and not /\n/.test(p.trimmed) and p.count >= @countThreshold)
+        @percentDifference(p) < @completeThreshold and not /\n/.test(p.trimmed) and (p.count / @totalCount) >= (@countThreshold / 100))
       .uniq((p) -> p.trimmed)
       .value()
   created: ->
     i18n.setLng(@language)
+    @loadCampaigns()
     @setupRegexes()
     @getProblems()
   methods:
+    loadCampaigns: ->
+      $.get(
+        '/db/campaign',
+        (@campaigns) =>
+          @selectedCampaign = _.find(@campaigns, (c) -> c.name is "Dungeon")
+          for campaign in @campaigns
+            Vue.set(campaign, 'levelsArray', Object.values(campaign.levels))
+      )
     escapeRegExp: (str) ->
       # https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
@@ -60,6 +74,7 @@ I18nVerifierComponent = Vue.extend
         {startDay: @startDay, endDay: @endDay, slug: @levelSlug},
         (@problems) =>
           @compareStrings()
+          @totalCount = _.reduce(_.map(@problems, (p)->p.count), (a,b)->a+b)
       )
     compareStrings: ->
       @problems.forEach (problem) =>
