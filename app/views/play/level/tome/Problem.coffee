@@ -104,6 +104,12 @@ module.exports = class Problem
       @ace.getSession().removeMarker @lineMarkerRange.id
       @lineMarkerRange.start.detach()
       @lineMarkerRange.end.detach()
+  
+  makeTranslationRegex: (englishString) ->
+    escapeRegExp = (str) ->
+      # https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+    new RegExp(escapeRegExp(englishString).replace(/\\\$\d|`\\\$\d`/g, '(`.+`|[^`]+)').replace(/\s+/g, '\\s+'))
 
   # TODO: Figure out how to ensure right amount of `s
   translate: (msg) ->
@@ -115,10 +121,6 @@ module.exports = class Problem
       msg = msg.replace regex, key
       msg.replace(/``/g, '`')
 
-    escapeRegExp = (str) ->
-      # https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
-      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-
     msg = msg.replace /([A-Za-z]+Error:) \1/, '$1'
     return msg if i18n.lng() in ['en', 'en-US']
     
@@ -126,7 +128,7 @@ module.exports = class Problem
     translationKeys = Object.keys(en.esper)
     for translationKey in translationKeys
       englishString = en.esper[translationKey]
-      regex = new RegExp(escapeRegExp(englishString).replace(/\\\$\d|`\\\$\d`/g, '(`[\\d\\w.:\'" ]+`|[\\d\\w.:\'" ]+)').replace(/\s+/g, '\\s+'))
+      regex = @makeTranslationRegex(englishString)
       tx regex, translationKey
       null
     msg

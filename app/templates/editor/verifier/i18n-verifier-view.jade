@@ -72,6 +72,6 @@
         pre
           div(v-for="problem, index in exportList",
              :style="{ backgroundColor: color(problem) }")
-            span err_{{String(index).padStart(3,'0')}}: "{{ problem.trimmed }}"
+            span {{ slugifyProblem(problem) }}: "{{ problem.trimmed }}"
             br
           
