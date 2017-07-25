@@ -15,17 +15,25 @@
     | Current: {{levelSlug}}
   br
   div(v-if="showLevels")
-    a(v-for="level in selectedCampaign.levelsArray"
-      @click="(levelSlug = level.slug) && getProblems()")
-      {{ level.name }}
+    button(@click="selectedLevelSlugs = selectedCampaign.levelsArray.map((l)=>{return l.slug})")
+      | Select All
+    span(v-for="level in selectedCampaign.levelsArray")
+      label
+        {{ level.name }} {{ selectedLevelSlugs.indexOf(level.slug) > -1 }}
+        input(type="checkbox",
+          :value="level.slug"
+          v-model="selectedLevelSlugs")
       =", "
   form(action="")
     input(v-model:value="levelSlug")
-    button(@click.prevent="getProblems")
+    button(@click.prevent="getProblems(levelSlug)")
       | Get Problems
   select(v-model="language")
     option(value="en") en
     option(value="de-DE") de-DE
+  select(v-model="messageOrHint")
+    option message
+    option hint
   br
   label
     | Partial threshold %
@@ -44,18 +52,21 @@
     tr
       th
         | Original
+      //- th
+      //-   | Translated
       th
-        | Translated
+        | Untranslated
       th
-        | Trimmed
+        | # chars not translated
       th
         | Difference
       th
         | Frequency
       
     tr(v-for="problem in problems", :style="{ backgroundColor: color(problem) }")
-      td {{ problem.message }}
-      td {{ problem.translated }}
+      td {{ problem[messageOrHint] }}
+      //- td {{ problem.translated }}
+      td {{ problem.trimmed }}
       td {{ problem.trimmed.length }}
       td {{ percentDifference(problem) }}%
       td {{ (problem.count / totalCount * 100).toFixed(1) }}%

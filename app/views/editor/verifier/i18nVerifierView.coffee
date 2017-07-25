@@ -9,12 +9,14 @@ I18nVerifierComponent = Vue.extend
     startDay: '2017-05-01'
     endDay: '2017-07-30'
     partialThreshold: 1
-    completeThreshold: 70
+    completeThreshold: 99
     countThreshold: 0
     totalCount: 0
+    messageOrHint: 'hint'
     me: me
     serverConfig: serverConfig
-    problems: []
+    # problems: []
+    problemsByLevel: {}
     regexes: []
     otherRegexes: []
     displayMode: 'export'
@@ -22,17 +24,27 @@ I18nVerifierComponent = Vue.extend
     showLevels: false
     campaigns: []
     selectedCampaign: null
+    selectedLevelSlugs: [_.last(location.href.split('/'))]
   computed:
     exportList: ->
       _(@problems).filter((p) =>
         @percentDifference(p) < @completeThreshold and not /\n/.test(p.trimmed) and (p.count / @totalCount) >= (@countThreshold / 100))
       .uniq((p) -> p.trimmed)
       .value()
+    problems: ->
+      _.flatten(Object.values(@problemsByLevel), true)
   created: ->
     i18n.setLng(@language)
     @loadCampaigns()
     @setupRegexes()
-    @getProblems()
+    @getProblems(@levelSlug)
+  watch:
+    selectedLevelSlugs: ->
+      for slug in @selectedLevelSlugs
+        if not @problemsByLevel[slug]
+          @getProblems(slug)
+    messageOrHint: ->
+      @compareStrings(@problems)
   methods:
     loadCampaigns: ->
       $.get(
@@ -48,18 +60,18 @@ I18nVerifierComponent = Vue.extend
     setupRegexes: ->
       en = require('locale/en').translation
       require('locale/de-DE')
-      otherLang = require('locale/'+@language).translation
+      otherLang = require('locale/en').translation
       translationKeys = Object.keys(en.esper)
       for translationKey in translationKeys
         englishString = en.esper[translationKey]
-        regex = new RegExp(@escapeRegExp(englishString).replace(/\\\$\d|`\\\$\d`/g, '(`[\\d\\w.:\'" ]+`|[\\d\\w.:\'" ]+)').replace(/\s+/g, '\\s+'))
+        regex = Problem.prototype.makeTranslationRegex(englishString)
         @regexes.push(regex)
       for translationKey in translationKeys
         otherString = otherLang.esper[translationKey] or ''
-        otherRegex = new RegExp(@escapeRegExp(otherString).replace(/\\\$\d|`\\\$\d`/g, '(`[\\d\\w.:\'" ]+`|[\\d\\w.:\'" ]+)').replace(/\s+/g, '\\s+'))
+        otherRegex = Problem.prototype.makeTranslationRegex(otherString)
         @otherRegexes.push(otherRegex)
     percentDifference: (problem) ->
-      ((1 - problem.trimmed.length / problem.message.length) * 100).toFixed(0)
+      ((1 - problem.trimmed.length / problem[@messageOrHint].length) * 100).toFixed(0)
     color: (problem) ->
       amountTranslated = @percentDifference(problem)
       if amountTranslated >= @completeThreshold
@@ -68,24 +80,34 @@ I18nVerifierComponent = Vue.extend
         return 'yellow'
       else
         return 'red'
-    getProblems: ->
+    getProblems: (levelSlug) ->
+      console.log "Fetching by slug", levelSlug
       $.post(
         '/db/user.code.problem/-/common_problems',
-        {startDay: @startDay, endDay: @endDay, slug: @levelSlug},
-        (@problems) =>
-          @compareStrings()
+        {startDay: @startDay, endDay: @endDay, slug: levelSlug},
+        (newProblems) =>
+          for problem in newProblems
+            problem.hint ?= ''
+          Vue.set(@problemsByLevel, levelSlug, newProblems)
+          @compareStrings(newProblems)
           @totalCount = _.reduce(_.map(@problems, (p)->p.count), (a,b)->a+b)
+          console.log _.reduce(_.map(newProblems, (p)->p.count), (a,b)->a+b), @totalCount
       )
-    compareStrings: ->
-      @problems.forEach (problem) =>
-        original = problem.message
-        translated = Problem.prototype.translate(problem.message)
+    compareStrings: (problems) ->
+      problems.forEach (problem) =>
+        original = problem[@messageOrHint]
+        translated = Problem.prototype.translate(problem[@messageOrHint])
         distance = Levenshtein.get(_.last(original.split(':')), _.last(translated.split(':')))
         # trimmed = original
         # for regex in @regexes
         #   trimmed = trimmed.replace(regex, '')
         trimmed = translated
         for regex in @otherRegexes
+          if false and /TypeError:.*Cannot.*read.*property/.test(original)# and /Target.*an.*enemy.*variable/.test(regex.toString())
+            console.log "===="
+            console.log trimmed
+            console.log trimmed.replace(regex, '').replace(/^\n/, '')
+            debugger if trimmed isnt trimmed.replace(regex, '').replace(/^\n/, '')
           trimmed = trimmed.replace(regex, '').replace(/^\n/, '')
         Vue.set(problem, 'translated', translated)
         Vue.set(problem, 'distance', distance)
