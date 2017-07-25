@@ -91,6 +91,9 @@ I18nVerifierComponent = Vue.extend
         Vue.set(problem, 'distance', distance)
         Vue.set(problem, 'trimmed', trimmed)
       # @problems.sort (a, b) -> a.distance - b.distance
+    slugifyProblem: (problem) ->
+      str = _.string.slugify(problem.trimmed)
+      str.split('-').slice(0,4).join('_')
 
 module.exports = class I18nVerifierView extends RootComponent
   id: 'i18n-verifier-view'
