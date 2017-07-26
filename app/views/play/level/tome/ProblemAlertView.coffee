@@ -24,7 +24,6 @@ module.exports = class ProblemAlertView extends CocoView
     super options
     @level = options.level
     @session = options.session
-    debugger
     if options.problem?
       @problem = options.problem
       @onWindowResize()
@@ -44,7 +43,6 @@ module.exports = class ProblemAlertView extends CocoView
       @playSound 'error_appear'
 
   setProblemMessage: ->
-    debugger
     if @problem?
       format = (s) -> marked(s.replace(/</g, '&lt;').replace(/>/g, '&gt;')) if s?
       message = @problem.message

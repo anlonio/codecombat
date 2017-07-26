@@ -2304,12 +2304,12 @@
 
   esper:
     line_no: "Line $1: "
-    x_not_a_function: "`$1` is not a function"
-    x_not_defined: "`$1` is not defined"
-    type_error: "TypeError: "
-    error: "Error: "
     reference_error: "ReferenceError: "
     argument_error: "ArgumentError: "
+    type_error: "TypeError: "
+    error: "Error: "
+    x_not_a_function: "$1 is not a function"
+    x_not_defined: "$1 is not defined"
     spelling_issues: "Look out for spelling issues: did you mean `$1` instead of `$2`?"
     capitalization_issues: "Look out for capitalization: `$1` should be `$2`."
     py_empty_block: "Empty $1. Put 4 spaces in front of statements inside the $2."

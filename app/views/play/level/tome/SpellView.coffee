@@ -833,7 +833,6 @@ module.exports = class SpellView extends CocoView
   convertAetherProblems: (aether, aetherProblems, isCast) ->
     # TODO: Functional-ify
     _.unique(aetherProblems, (p) -> p.userInfo?.key).map (aetherProblem) =>
-      debugger
       new Problem { aether, aetherProblem, @ace, isCast, levelID: @options.levelID }
 
   displayAether: (aether, isCast=false) ->

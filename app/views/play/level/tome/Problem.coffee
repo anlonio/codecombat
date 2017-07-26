@@ -109,49 +109,48 @@ module.exports = class Problem
     escapeRegExp = (str) ->
       # https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-    # If there's anything after the last placeholder, we want to use a
-    #   non-greedy matcher to prevent catching too much in the placeholder
-    # This is mostly so that eg `Line $1: ` doesn't grab all of `Line 12: ReferenceError: `
-    if _.last(englishString.split(/(`\$\d`|\$\d)/)) isnt ''
-      new RegExp(escapeRegExp(englishString).replace(/\\\$\d|`\\\$\d`/g, '(`.+?`|[^`]+?)').replace(/\s+/g, '\\s+'))
-    else
-      console.log "Using greedy regex for ", englishString
-      new RegExp(escapeRegExp(englishString).replace(/\\\$\d|`\\\$\d`/g, '(`.+`|[^`]+)').replace(/\s+/g, '\\s+'))
+    new RegExp(escapeRegExp(englishString).replace(/\\\$\d/g, '([^`]+)').replace(/\s+/g, '\\s+'))
 
-  # TODO: Figure out how to ensure right amount of `s
   translate: (msg) ->
-    # Translate each line independently, since regexes act weirdly with newlines
-    if /\n/.test(msg)
+    return msg if not msg
+    if /\n/.test(msg) # Translate each line independently, since regexes act weirdly with newlines
       return msg.split('\n').map((line) => @translate(line)).join('\n')
-    # console.log msg
-    return msg unless msg
-    msgParts = [] # Work around greedy first placeholder with `s
-    console.log msgParts, msg
     tx = (regex, key) =>
       ki = "esper.#{key}"
       key = $.i18n.t(ki)
       return if key is ki
-      leftover = msg.replace new RegExp(regex.toString().slice(1,-1) + '.*'), key
-      if leftover isnt msg
-        msgParts.push(leftover)
-      msg = msg.replace regex, ''
-      msg.replace(/``/g, '`')
-      debugger
-      console.log msgParts, msg
-      # debugger
-      null
+      replaced = msg.replace regex, key
+      if replaced isnt msg
+        return [replaced.replace(/``/g, '`'), true]
+      return [msg, false]
 
     msg = msg.replace /([A-Za-z]+Error:) \1/, '$1'
     return msg if i18n.lng() in ['en', 'en-US']
     
+    # Separately handle line number and error type prefixes
     en = require('locale/en').translation
+    lineNumberPart = ''
+    if /Line \d+: /.test(msg)
+      lineNumber = msg.match(/Line (\d)+: /)[1]
+      msg = msg.replace(/Line \d+: /, '')
+      lineNumberPart = $.i18n.t("esper.line_no").replace('$1', lineNumber)
+    
+    errorNamePart = ''
+    for translationKey in ['reference_error', 'argument_error', 'type_error', 'error']
+      errorString = en.esper[translationKey]
+      if msg.startsWith(errorString)
+        msg = msg.replace(errorString, '')
+        errorNamePart = $.i18n.t("esper.#{translationKey}")
+        break
+
+    # Automatically generate and apply replacements based on entries in locale file
     translationKeys = Object.keys(en.esper)
+    originalMessage = msg
     for translationKey in translationKeys
       englishString = en.esper[translationKey]
       regex = @makeTranslationRegex(englishString)
-      tx regex, translationKey
-      break if msg.length is 0
+      [msg, didTranslate] = tx regex, translationKey
+      break if didTranslate
       null
-    msgParts.push(msg) # Whatever is left over
-    # debugger
-    msgParts.join('')
+
+    lineNumberPart + errorNamePart + msg

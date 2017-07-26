@@ -12,14 +12,14 @@ I18nVerifierComponent = Vue.extend
     completeThreshold: 99
     countThreshold: 0
     totalCount: 0
-    messageOrHint: 'hint'
+    messageOrHint: 'message'
     me: me
     serverConfig: serverConfig
     # problems: []
     problemsByLevel: {}
     regexes: []
     otherRegexes: []
-    displayMode: 'export'
+    displayMode: 'human-readable'
     showCampaigns: false
     showLevels: false
     campaigns: []
@@ -28,7 +28,7 @@ I18nVerifierComponent = Vue.extend
   computed:
     exportList: ->
       _(@problems).filter((p) =>
-        @percentDifference(p) < @completeThreshold and not /\n/.test(p.trimmed) and (p.count / @totalCount) >= (@countThreshold / 100))
+        @percentDifference(p) < @completeThreshold and (p.count / @totalCount) >= (@countThreshold / 100))
       .uniq((p) -> p.trimmed)
       .value()
     problems: ->
