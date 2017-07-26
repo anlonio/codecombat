@@ -77,7 +77,3 @@ module.exports = (options) ->
       debug:
         type: ['boolean']
         default: false
-      humanLanguage:
-        type: 'object'
-        default: {}
-        description: "i18n object for translating error messages"

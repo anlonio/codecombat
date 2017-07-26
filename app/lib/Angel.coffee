@@ -13,9 +13,9 @@ reportedLoadErrorAlready = false
 module.exports = class Angel extends CocoClass
   @nicks: ['Archer', 'Lana', 'Cyril', 'Pam', 'Cheryl', 'Woodhouse', 'Ray', 'Krieger']
 
-  infiniteLoopIntervalDuration: 1000000  # check this often; must be longer than other two combined
-  infiniteLoopTimeoutDuration: 750000  # wait this long for a response when checking
-  abortTimeoutDuration: 50000  # give in-process or dying workers this long to give up
+  infiniteLoopIntervalDuration: 10000  # check this often; must be longer than other two combined
+  infiniteLoopTimeoutDuration: 7500  # wait this long for a response when checking
+  abortTimeoutDuration: 500  # give in-process or dying workers this long to give up
 
   subscriptions:
     'level:flag-updated': 'onFlagEvent'

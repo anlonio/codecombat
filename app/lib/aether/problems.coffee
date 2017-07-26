@@ -38,7 +38,6 @@ scoreFuzziness = 0.8
 acceptMatchThreshold = 0.5
 
 module.exports.createUserCodeProblem = (options) ->
-  # debugger
   options ?= {}
   options.aether ?= @  # Can either be called standalone or as an Aether method
   if options.type is 'transpile' and options.error
@@ -335,9 +334,6 @@ module.exports.HintCreator = class HintCreator
     @context = context ? {}
 
   getHint: (code, {message, range, error, aether}) ->
-    # console.trace()
-    # debugger
-    console.log error
     return unless @context?
     if error.code is 'UndefinedVariable' and error.when is 'write' and aether.language.id is 'javascript'
       return "Missing `var`. Use `var #{error.ident} =` to make a new variable."

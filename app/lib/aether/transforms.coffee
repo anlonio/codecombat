@@ -75,7 +75,6 @@ module.exports.makeCheckThisKeywords = makeCheckThisKeywords = (globals, varName
         hint = "There is no function `#{v}`, but `hero` has a method `#{v}`."
         if node.originalRange
           range = language.removeWrappedIndent [node.originalRange.start, node.originalRange.end]
-        # debugger
         problem = @createUserCodeProblem type: 'transpile', reporter: 'aether', kind: 'MissingThis', message: message, hint: hint, range: range  # TODO: code/codePrefix?
         @addProblem problem
 

@@ -15,7 +15,6 @@ protectBuiltins = require './protectBuiltins'
 optionsValidator = require './validators/options'
 languages = require './languages/languages'
 interpreter = require './interpreter'
-# i18n = require 'i18n'
 
 module.exports = class Aether
   @execution: execution
@@ -54,12 +53,9 @@ module.exports = class Aether
     #  aether.lastStatementRange = [rng.start, rng.end] if rng
 
     Object.defineProperty @, 'lastStatementRange',
-      get: () ->
+      get: () -> 
         rng = @esperEngine?.evaluator?.lastASTNodeProcessed?.originalRange
         return [rng.start, rng.end] if rng
-    
-    @HintCreator = problems.HintCreator
-    @humanLanguage = options.humanLanguage
 
   # Language can be changed after construction. (It will reset Aether's state.)
   setLanguage: (language) ->

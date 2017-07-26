@@ -15,7 +15,6 @@ utils = require 'core/utils'
 CodeLog = require 'models/CodeLog'
 Autocomplete = require './editor/autocomplete'
 TokenIterator = ace.require('ace/token_iterator').TokenIterator
-# HintCreator = require('lib/aether/problems').HintCreator
 
 module.exports = class SpellView extends CocoView
   id: 'spell-view'
@@ -842,8 +841,6 @@ module.exports = class SpellView extends CocoView
 
     newProblems = @convertAetherProblems(aether, aether.getAllProblems(), isCast)
     annotations.push problem.annotation for problem in newProblems when problem.annotation
-    console.log newProblems[0]?.aetherProblem
-    # debugger if newProblems.length
     if isCast
       @displayProblemBanner(newProblems[0]) if newProblems[0]
       @saveUserCodeProblem(aether, problem.aetherProblem) for problem in newProblems
