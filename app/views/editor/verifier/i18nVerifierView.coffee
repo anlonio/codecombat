@@ -97,7 +97,7 @@ I18nVerifierComponent = Vue.extend
       problems.forEach (problem) =>
         original = problem[@messageOrHint]
         translated = Problem.prototype.translate(problem[@messageOrHint])
-        distance = Levenshtein.get(_.last(original.split(':')), _.last(translated.split(':')))
+        # distance = Levenshtein.get(_.last(original.split(':')), _.last(translated.split(':')))
         # trimmed = original
         # for regex in @regexes
         #   trimmed = trimmed.replace(regex, '')
@@ -110,7 +110,7 @@ I18nVerifierComponent = Vue.extend
             debugger if trimmed isnt trimmed.replace(regex, '').replace(/^\n/, '')
           trimmed = trimmed.replace(regex, '').replace(/^\n/, '')
         Vue.set(problem, 'translated', translated)
-        Vue.set(problem, 'distance', distance)
+        # Vue.set(problem, 'distance', distance)
         Vue.set(problem, 'trimmed', trimmed)
       # @problems.sort (a, b) -> a.distance - b.distance
     slugifyProblem: (problem) ->
