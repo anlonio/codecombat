@@ -26,11 +26,11 @@
       =", "
   form(action="")
     input(v-model:value="levelSlug")
-    button(@click.prevent="getProblems(levelSlug)")
+    button(@click.prevent="getProblemsAndCompare(levelSlug)")
       | Get Problems
   select(v-model="language")
-    option(value="en") en
-    option(value="de-DE") de-DE
+    option(v-for="locale in Object.keys(allLocales)")
+      | {{ locale }}
   select(v-model="messageOrHint")
     option message
     option hint
@@ -48,13 +48,27 @@
     option human-readable
     option export
   | Total errors: {{ totalCount }}
+  br
+  span
+    label
+      | Translated
+      input(type="checkbox" v-model="showTranslated")
+  span
+    label
+      | Untranslated
+      input(type="checkbox" v-model="showUntranslated")
+  div
+    span(v-if="loading")
+      | Loading...
+    span(v-if="working")
+      | Working...
   table.human-readable(v-if="displayMode === 'human-readable'")
     tr
       th
         | Original
-      //- th
-      //-   | Translated
-      th
+      th(v-if="showTranslated")
+        | Translated
+      th(v-if="showUntranslated")
         | Untranslated
       th
         | # chars not translated
@@ -63,11 +77,18 @@
       th
         | Frequency
       
-    tr(v-for="problem in problems", :style="{ backgroundColor: color(problem) }")
+    tr(v-for="problem in problems"
+       v-if="problem[messageOrHint] && problem[messageOrHint].length > 0"
+       v-bind:style="{ backgroundColor: color(problem) }")
       td {{ problem[messageOrHint] }}
-      //- td {{ problem.translated }}
-      td {{ problem.trimmed }}
-      td {{ problem.trimmed.length }}
+      td(v-if="showTranslated")
+        {{ problem.translated }}
+      td(v-if="showUntranslated")
+        {{ problem.trimmed }}
+      td(v-if="typeof problem.trimmed === 'string'")
+        {{ problem.trimmed.length }}
+      td(v-else)
+        | ???
       td {{ percentDifference(problem) }}%
       td {{ (problem.count / totalCount * 100).toFixed(1) }}%
   

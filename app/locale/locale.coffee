@@ -16,6 +16,7 @@ module.exports =
       @[code] = require(path)
 
 
+  'rot13': { nativeDescription: 'rot13', englishDescription: 'rot13' }
   'en': { nativeDescription: 'English', englishDescription: 'English' }
   'en-US': { nativeDescription: 'English (US)', englishDescription: 'English (US)' }
   'en-GB': { nativeDescription: 'English (UK)', englishDescription: 'English (UK)' }

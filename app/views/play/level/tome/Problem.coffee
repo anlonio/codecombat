@@ -109,7 +109,7 @@ module.exports = class Problem
     escapeRegExp = (str) ->
       # https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-    new RegExp(escapeRegExp(englishString).replace(/\\\$\d/g, '([^`]+)').replace(/\s+/g, '\\s+'))
+    new RegExp(escapeRegExp(englishString).replace(/\\\$\d/g, '(.+)').replace(/ +/g, ' +'))
 
   translate: (msg) ->
     return msg if not msg
@@ -146,7 +146,7 @@ module.exports = class Problem
     # Automatically generate and apply replacements based on entries in locale file
     translationKeys = Object.keys(en.esper)
     originalMessage = msg
-    for translationKey in translationKeys
+    for translationKey in translationKeys when translationKey not in ['line_no', 'reference_error', 'argument_error', 'type_error', 'error']
       englishString = en.esper[translationKey]
       regex = @makeTranslationRegex(englishString)
       [msg, didTranslate] = tx regex, translationKey

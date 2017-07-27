@@ -2312,7 +2312,7 @@
     x_not_defined: "$1 is not defined"
     spelling_issues: "Look out for spelling issues: did you mean `$1` instead of `$2`?"
     capitalization_issues: "Look out for capitalization: `$1` should be `$2`."
-    py_empty_block: "Empty $1. Put 4 spaces in front of statements inside the $2."
+    py_empty_block: "Empty $1. Put 4 spaces in front of statements inside the $2 statement."
     fx_missing_paren: "If you want to call `$1` as a function, you need `()`'s"
     unmatched_token: "Unmatched `$1`.  Every opening `$2` needs a closing `$3` to match it."
     unterminated_string: "Unterminated string. Add a matching `\"` at the end of your string."
@@ -2351,7 +2351,7 @@
     code_never_finished_its: "Code never finished. It's either really slow or has an infinite loop."
     unclosed_string: "Unclosed string."
     unmatched: "Unmatched '$1'."
-    error_you_said_achoo: "Error: You said: $1, but the password is: $2. (Capital letters are important.)"
+    error_you_said_achoo: "You said: $1, but the password is: $2. (Capital letters are important.)"
     indentation_error_unindent_does: "Indentation Error: unindent does not match any outer indentation level"
     indentation_error: "Indentation error."
     need_a_after_while: "Need a `:` after `$1`." # TODO: Reconcile with colon_after_while
@@ -2364,4 +2364,7 @@
     there_is_no_enemy: "There is no `$1`. Use `$2` first." # Hints start here
     try_herofindnearestenemy: "Try `$1`"
     there_is_no_function: "There is no function `$1`, but `$2` has a method `$3`."
+    attacks_argument_enemy_has: "`$1`'s argument `$2` has a problem."
+    is_there_an_enemy: "Is there an enemy within your line-of-sight yet?"
+    target_is_null_is: "Target is $1. Is there always a target to attack? (Use $2?)"
     
