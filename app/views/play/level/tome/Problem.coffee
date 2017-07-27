@@ -105,6 +105,10 @@ module.exports = class Problem
       @lineMarkerRange.start.detach()
       @lineMarkerRange.end.detach()
   
+  # Here we take a string from the locale file, find the placeholders ($1/$2/etc)
+  #   and replace them with capture groups (.+),
+  # returns a regex that will match against the error message
+  #   and capture any dynamic values in the text
   makeTranslationRegex: (englishString) ->
     escapeRegExp = (str) ->
       # https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
@@ -115,14 +119,6 @@ module.exports = class Problem
     return msg if not msg
     if /\n/.test(msg) # Translate each line independently, since regexes act weirdly with newlines
       return msg.split('\n').map((line) => @translate(line)).join('\n')
-    tx = (regex, key) =>
-      ki = "esper.#{key}"
-      key = $.i18n.t(ki)
-      return if key is ki
-      replaced = msg.replace regex, key
-      if replaced isnt msg
-        return [replaced.replace(/``/g, '`'), true]
-      return [msg, false]
 
     msg = msg.replace /([A-Za-z]+Error:) \1/, '$1'
     return msg if i18n.lng() in ['en', 'en-US']
@@ -143,13 +139,23 @@ module.exports = class Problem
         errorNamePart = $.i18n.t("esper.#{translationKey}")
         break
 
+    applyReplacementTranslation = (regex, key) =>
+      fullKey = "esper.#{key}"
+      replacementTemplate = $.i18n.t(fullKey)
+      return if replacementTemplate is fullKey
+      # This carries over any capture groups from the regex into $N placeholders in the template string
+      replaced = msg.replace regex, replacementTemplate
+      if replaced isnt msg
+        return [replaced.replace(/``/g, '`'), true]
+      return [msg, false]
+
     # Automatically generate and apply replacements based on entries in locale file
     translationKeys = Object.keys(en.esper)
     originalMessage = msg
     for translationKey in translationKeys when translationKey not in ['line_no', 'reference_error', 'argument_error', 'type_error', 'error']
       englishString = en.esper[translationKey]
       regex = @makeTranslationRegex(englishString)
-      [msg, didTranslate] = tx regex, translationKey
+      [msg, didTranslate] = applyReplacementTranslation regex, translationKey
       break if didTranslate
       null
 
