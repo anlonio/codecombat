@@ -19,10 +19,10 @@
       | Select All
     span(v-for="level in selectedCampaign.levelsArray")
       label
-        {{ level.name }} {{ selectedLevelSlugs.indexOf(level.slug) > -1 }}
         input(type="checkbox",
           :value="level.slug"
           v-model="selectedLevelSlugs")
+        {{ level.name }}
       =", "
   form(action="")
     input(v-model:value="levelSlug")
