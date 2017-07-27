@@ -298,7 +298,7 @@ getRuntimeHint = (options) ->
   hintCreator = new HintCreator context, languageID
   hintCreator.getHint code, options
 
-module.exports.HintCreator = class HintCreator
+class HintCreator
   # Create hints for an error message based on a problem context
   # TODO: better class name, move this to a separate file
 
