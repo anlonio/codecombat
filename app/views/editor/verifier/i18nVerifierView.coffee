@@ -79,9 +79,6 @@ I18nVerifierComponent = Vue.extend
           for campaign in @campaigns
             Vue.set(campaign, 'levelsArray', Object.values(campaign.levels))
       )
-    escapeRegExp: (str) ->
-      # https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
-      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
     setupRegexes: ->
       en = require('locale/en').translation
       otherLang = require("locale/#{@language}").translation
