@@ -16,7 +16,6 @@ module.exports =
       @[code] = require(path)
 
 
-  'rot13': { nativeDescription: 'rot13', englishDescription: 'rot13' }
   'en': { nativeDescription: 'English', englishDescription: 'English' }
   'en-US': { nativeDescription: 'English (US)', englishDescription: 'English (US)' }
   'en-GB': { nativeDescription: 'English (UK)', englishDescription: 'English (UK)' }
@@ -78,6 +77,7 @@ module.exports =
   'vi': { nativeDescription: 'Tiếng Việt', englishDescription: 'Vietnamese' }
   'zh-WUU-HANS': { nativeDescription: '吴语', englishDescription: 'Wuu (Simplified)' }
   'zh-WUU-HANT': { nativeDescription: '吳語', englishDescription: 'Wuu (Traditional)' }
+  'rot13': { nativeDescription: 'rot13', englishDescription: 'English with the letters jumbled' }
 
   installVueI18n: ->
     # https://github.com/rse/vue-i18next/blob/master/vue-i18next.js, converted by js2coffee 2.2.0

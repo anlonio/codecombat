@@ -1,4 +1,4 @@
-module.exports = nativeDescription: "rot13", englishDescription: "rot13", translation:
+module.exports = nativeDescription: "rot13", englishDescription: "English with the letters jumbled", translation:
   new_home:
     slogan: "Gur zbfg ratntvat tnzr sbe yrneavat cebtenzzvat."
     classroom_edition: "Pynffebbz Rqvgvba:"
