@@ -2324,7 +2324,7 @@
     attack_capitalization: "Attack $1, not $2. (Capital letters are important.)"
     empty_while: "Empty while statement. Put 4 spaces in front of statements inside the while statement."
     line_of_site: "`$1`'s argument `$2` has a problem. Is there an enemy within your line-of-sight yet?"
-    need_a_after_while: "Need a `:` after `$1`."
+    need_a_after_while: "Need a `$1` after `$2`."
     too_much_indentation: "Too much indentation at the beginning of this line."
     missing_hero: "Missing `$1` keyword; should be `$2`."
     takes_no_arguments: "`$1` takes no arguments."
