@@ -19,17 +19,17 @@
       | Select All
     span(v-for="level in selectedCampaign.levelsArray")
       label
+        {{ level.name }} {{ selectedLevelSlugs.indexOf(level.slug) > -1 }}
         input(type="checkbox",
           :value="level.slug"
           v-model="selectedLevelSlugs")
-        {{ level.name }}
       =", "
   form(action="")
     input(v-model:value="levelSlug")
     button(@click.prevent="getProblemsAndCompare(levelSlug)")
       | Get Problems
   select(v-model="language")
-    option(v-for="locale in Object.keys(allLocales)")
+    option(v-for="locale in allLocales")
       | {{ locale }}
   select(v-model="messageOrHint")
     option message
@@ -60,8 +60,6 @@
   div
     span(v-if="loading")
       | Loading...
-    span(v-if="working")
-      | Working...
   table.human-readable(v-if="displayMode === 'human-readable'")
     tr
       th

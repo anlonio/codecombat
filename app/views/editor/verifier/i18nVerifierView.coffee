@@ -5,9 +5,9 @@ locale = require 'locale/locale'
 I18nVerifierComponent = Vue.extend
   template: require('templates/editor/verifier/i18n-verifier-view')()
   data: ->
-    allLocales: _.omit(locale, 'update', 'installVueI18n')
+    allLocales: Object.keys(_.omit(locale, 'update', 'installVueI18n')).concat('rot13')
     language: 'en'
-    levelSlug: _.last(location.href.split('/'))
+    levelSlug: location.href.match('/editor/i18n-verifier/(.*)')?[1]
     startDay: '2017-05-01'
     endDay: '2017-07-30'
     partialThreshold: 1
@@ -17,7 +17,6 @@ I18nVerifierComponent = Vue.extend
     messageOrHint: 'message'
     me: me
     serverConfig: serverConfig
-    # problems: []
     problemsByLevel: {}
     regexes: []
     otherRegexes: []
@@ -29,6 +28,7 @@ I18nVerifierComponent = Vue.extend
     campaigns: []
     selectedCampaign: null
     selectedLevelSlugs: [_.last(location.href.split('/'))]
+    loading: true
   computed:
     exportList: ->
       _(@problems).filter((p) =>
@@ -46,6 +46,7 @@ I18nVerifierComponent = Vue.extend
       @setupRegexes()
       @getProblems(@levelSlug).then (newProblems) =>
         @compareStrings(newProblems)
+        @loading = false
   watch:
     language: ->
       @loadLanguage(@language).then =>
