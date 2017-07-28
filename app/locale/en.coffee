@@ -2324,7 +2324,7 @@
     attack_capitalization: "Attack $1, not $2. (Capital letters are important.)"
     empty_while: "Empty while statement. Put 4 spaces in front of statements inside the while statement."
     line_of_site: "`$1`'s argument `$2` has a problem. Is there an enemy within your line-of-sight yet?"
-    colon_after_while: "Need a `:` after `while-true loop:`."
+    need_a_after_while: "Need a `:` after `$1`."
     too_much_indentation: "Too much indentation at the beginning of this line."
     missing_hero: "Missing `$1` keyword; should be `$2`."
     takes_no_arguments: "`$1` takes no arguments."
@@ -2354,7 +2354,6 @@
     error_you_said_achoo: "You said: $1, but the password is: $2. (Capital letters are important.)"
     indentation_error_unindent_does: "Indentation Error: unindent does not match any outer indentation level"
     indentation_error: "Indentation error."
-    need_a_after_while: "Need a `:` after `$1`." # TODO: Reconcile with colon_after_while
     need_a_on_the: "Need a `:` on the end of the line following `$1`."
     attempt_to_call_undefined: "attempt to call '$1' (a nil value)"
     unterminated: "Unterminated `$1`"
