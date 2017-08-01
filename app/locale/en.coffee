@@ -2360,6 +2360,7 @@
     target_an_enemy_variable: "Target an $1 variable, not the string $2. (Try using $3.)"
     error_use_the_variable: "Use the variable name like `$1` instead of a string like `$2`"
     indentation_unindent_does_not: "Indentation unindent does not match any outer indentation level"
+    unclosed_paren_in_function_arguments: "Unclosed $1 in function arguments."
     there_is_no_enemy: "There is no `$1`. Use `$2` first." # Hints start here
     try_herofindnearestenemy: "Try `$1`"
     there_is_no_function: "There is no function `$1`, but `$2` has a method `$3`."

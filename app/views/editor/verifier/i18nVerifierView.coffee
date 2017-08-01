@@ -41,7 +41,10 @@ I18nVerifierComponent = Vue.extend
       .uniq((p) -> p.trimmed)
       .value()
     problems: ->
-      _.sortBy(_.flatten(Object.values(@problemsByLevel), true), (p) -> -p.count)
+      _.sortBy(_.flatten(Object.values(@problemsByLevel), true), (p) => -p.count)
+    problemCountByLevel: ->
+      _.mapValues @problemsByLevel, (problems) ->
+        _.reduce(_.map(problems, 'count'), (a,b)->a+b)
   created: co.wrap ->
     @levelSlug = @$options.propsData.levelSlug
     @selectedLevelSlugs = [@levelSlug]
@@ -71,6 +74,8 @@ I18nVerifierComponent = Vue.extend
     messageOrHint: ->
       @compareStrings(@problems)
   methods:
+    problemFrequency: (problem) ->
+      problem.count / @problemCountByLevel[problem.levelSlug]
     loadCampaigns: co.wrap ->
       @campaigns = yield api.campaigns.getAll({ project: 'levels' })
       @selectedCampaign = _.find(@campaigns, (c) -> c.name is "Dungeon")
@@ -108,6 +113,7 @@ I18nVerifierComponent = Vue.extend
       newProblems = yield api.userCodeProblems.getCommon({ levelSlug, @startDay, @endDay })
       for problem in newProblems
         problem.hint ?= ''
+        problem.levelSlug = levelSlug
       Vue.set(@problemsByLevel, levelSlug, newProblems)
       @totalCount = _.reduce(_.map(@problems, (p)->p.count), (a,b)->a+b)
       return newProblems

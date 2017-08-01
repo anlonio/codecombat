@@ -89,7 +89,12 @@
       td(v-else)
         | ???
       td {{ percentDifference(problem) }}%
-      td {{ (problem.count / totalCount * 100).toFixed(1) }}%
+      td
+        | {{ (problem.count / totalCount * 100).toFixed(1) }}%
+        | ({{problem.count}}/{{totalCount}})
+      td
+        | {{ (problemFrequency(problem) * 100).toFixed(1) }}%
+        | ({{problem.count}}/{{problemCountByLevel[problem.levelSlug]}})
   
   .export(v-else)
     tr
